@@ -1,0 +1,210 @@
+#-------------------------------------------------------------------
+# App requirements
+#-------------------------------------------------------------------
+require(dplyr)
+require(ggplot2)
+require(shiny)
+require(shinythemes)
+
+
+#-------------------------------------------------------------------
+# UDFs 
+#-------------------------------------------------------------------
+deliverRawContribution <- function(aFraction, aVectorOfIncomes) {
+  
+  sum(aFraction*aVectorOfIncomes)
+  
+}
+
+deliverIncomeTibb <- function(aRoomieVector, anIncomeVector) {
+  
+  numberRoomies <- length(aRoomieVector)
+  incomeTibb <- tibble(roomie = rep(NA, 10), income = rep(NA, 10))
+  roomies <- c(aRoomieVector, rep(NA, 10 - numberRoomies))
+  incomes <- c(anIncomeVector, rep(NA, 10 - numberRoomies))
+  
+  incomeTibb %>%
+    mutate(roomie = roomies, income = incomes) %>%
+    filter(!is.na(roomie))
+}
+
+
+
+addRawContribution <- function(anIncomeTibb, aTotalRent, aBareMinimum) {
+  
+  contributionFunction <- function(x) deliverRawContribution(x, anIncomeTibb$income) - aTotalRent
+  
+  thisFraction <- uniroot(contributionFunction, lower=0.1, upper=100000000)$root
+  
+  anIncomeTibb %>%
+    mutate(rawContribution = thisFraction * income,
+           isLowerThanMin = rawContribution < aBareMinimum)
+}
+
+computeJustDistribution <- function(aRoomieVector, 
+                                    anIncomeVector, 
+                                    aTotalRent, 
+                                    aBareMinimum) {
+  
+  
+  subTibb <- deliverIncomeTibb(aRoomieVector, anIncomeVector) %>% 
+    addRawContribution(aTotalRent, aBareMinimum)
+  
+  if(TRUE %in% subTibb$isLowerThanMin) { 
+    
+    cappedTibb <- subTibb %>%
+      filter(isLowerThanMin) %>%
+      transmute(roomie, income, adjustedContribution = aBareMinimum)
+    
+    newTotalRent <- aTotalRent - (nrow(cappedTibb) * aBareMinimum)
+    
+    if(newTotalRent < 0) {
+      return(deliverDummyTibb())
+    }
+    
+    newSubTibb <- subTibb %>%
+      filter(!isLowerThanMin) %>%
+      select(roomie, income) %>%
+      addRawContribution(newTotalRent, aBareMinimum) %>%
+      transmute(roomie, income, adjustedContribution = rawContribution)
+    
+    summaryTibb <- cappedTibb %>%
+      rbind(newSubTibb) %>%
+      transmute(roomie, 
+                income, 
+                adjustedContribution = round(adjustedContribution, digits = 2),
+                percentageUsed = round(100*adjustedContribution/income, digits = 1),
+                notification = paste0(roomie, " chips in ", percentageUsed, "% of his/her income"))
+    
+    return(summaryTibb)
+  }
+  
+  summaryTibb <- subTibb %>%
+    transmute(roomie, 
+              income, 
+              adjustedContribution = round(rawContribution, digits = 2),
+              percentageUsed = round(100*adjustedContribution/income, digits = 1),
+              notification = paste0(roomie, " chips in ", percentageUsed, "% of his/her income"))
+  
+  return(summaryTibb)
+}
+
+deliverDummyTibb <- function() {
+  tibble(msg = c('The bare minimum is too high!'), income = c(0))
+}
+
+
+deliverJustDistribution <- function(aRoomieVector, 
+                                    anIncomeVector, 
+                                    aTotalRent, 
+                                    aBareMinimum) {
+  
+  result <- computeJustDistribution(aRoomieVector, anIncomeVector, aTotalRent, aBareMinimum)
+  
+  if(nrow(result)==1 && result$income==0) {
+    
+    plot <- ggplot(result, aes(msg, income, label = msg)) +
+      geom_point() +
+      geom_label(size = 10) +
+      labs(x = "", y = "", title = "") +
+      theme(axis.text.x = element_blank(),
+            axis.text.y = element_blank(),
+            axis.ticks = element_blank())
+    
+    return(list(result, plot))
+  }
+  
+  plot <- ggplot(result, aes(roomie, adjustedContribution, label = adjustedContribution)) + 
+    geom_bar(stat = "identity", fill = '#B8860B', color = 'black') + 
+    coord_flip() +
+    theme(panel.background = element_rect(fill = "gray",
+                                          colour = "black",
+                                          size = 0.5, 
+                                          linetype = "solid"),
+          plot.title = element_text(color = "black", size = 18, face = "bold", hjust = 0.5),
+          axis.text = element_text(color = "black", size = 16),
+          axis.title.x = element_text(color = "black", size = 16),
+          axis.title.y = element_text(color = "black", size = 16)
+          ) +
+    labs(x = "", y = "MUCHes",
+         title = "Income-based contributions") +
+    geom_text(size = 7, position = position_stack(vjust = 0.5), color = "#F8F8FF")
+  
+  return(list(result, plot))
+}
+
+#-------------------------------------------------------------------
+# User Interface
+#-------------------------------------------------------------------
+ui <- fluidPage(
+  
+  titlePanel("Cost distribution"),
+  theme = shinythemes::shinytheme("simplex"),
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("total", 
+                  "Total rent (MUCHes):", 
+                  value = 1450,
+                  min = 1,
+                  max = 3000,
+                  step = 10),
+      sliderInput("min", 
+                  "Bare minimum (MUCHes):", 
+                  value = 200,
+                  min = 1,
+                  max = 3000,
+                  step = 10),
+      sliderInput("incomeA", 
+                  "Income Aime (MUCHes):", 
+                  value = 800,
+                  min = 1,
+                  max = 3000,
+                  step = 10),
+      sliderInput("incomeL", 
+                  "Income Lina (MUCHes):", 
+                  value = 800,
+                  min = 1,
+                  max = 3000,
+                  step = 10),
+      sliderInput("incomeM", 
+                  "Income Maurice (MUCHes):", 
+                  value = 800,
+                  min = 1,
+                  max = 3000,
+                  step = 10),
+      sliderInput("incomeJ", 
+                  "Income Janice (MUCHes):", 
+                  value = 800,
+                  min = 1,
+                  max = 3000,
+                  step = 10)
+    ),
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Chart", plotOutput("bars"))
+      )
+    )
+  )
+)
+
+#-------------------------------------------------------------------
+# Server
+#-------------------------------------------------------------------
+server <- function(input, output, session) {
+  
+  rcDistribution <- reactive({
+    
+    deliverJustDistribution(c('Aime', 'Lina', 'Maurice', 'Janice'),
+                            c(input$incomeA, input$incomeL, input$incomeM, input$incomeJ),
+                            input$total, input$min)
+    
+  })
+  
+  
+  output$bars <- renderPlot({rcDistribution()[[2]]})
+}
+
+#-------------------------------------------------------------------
+# Run App
+#-------------------------------------------------------------------
+shinyApp(ui = ui, server = server)
