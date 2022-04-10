@@ -15,12 +15,12 @@ ui <- fluidPage(
       HTML("<h5><b>Financials</b></h5>"),
       numericInput('total', 
                    'Total rent:',
-                   value = 1450,
+                   value = 1500,
                    min = 1,
-                   max = 3000),
+                   max = 30000),
       numericInput("min", 
                   "Bare minimum:", 
-                  value = 200,
+                  value = 150,
                   min = 1,
                   max = 3000),
       HTML("<br><h5><b>Income per roomie</b></h5>"),
@@ -36,13 +36,13 @@ ui <- fluidPage(
                   max = 10000),
       numericInput("incomeL", 
                   "Lina:", 
-                  value = 800,
+                  value = 600,
                   min = 1,
                   max = 10000),
       conditionalPanel(condition = "input.roomies > 2",
                        numericInput("incomeM",
                                     "Maurice:", 
-                                    value = 800,
+                                    value = 400,
                                     min = 1,
                                     max = 10000)
         ),
@@ -120,7 +120,7 @@ server <- function(input, output, session) {
     
     names <- c('Aimé', 'Lina', 'Maurice', 'Janice', 'Paola', 'Salomon', 'Norbert', 'Tomasz', 'Ursula', 'Françoise')
     incomes <- c(input$incomeA, input$incomeL, input$incomeM, input$incomeJ, input$incomeP, input$incomeS, input$incomeN, input$incomeT, input$incomeU, input$incomeF)
-    colours <- c('#1ba1e2', '#60a917', '#a20025', '#f2b336', '#0042c4', '#005800', '#6e4b05', '#6a00ff', '#b19e00', '#6d00a3')
+    colours <- c('#1ba1e2', '#60a917', '#a20025', '#c58608', '#0042c4', '#005800', '#6e4b05', '#6a00ff', '#b19e00', '#6d00a3')
     
     deliverJustDistribution(names[1:input$roomies],
                             incomes[1:input$roomies],
@@ -147,14 +147,15 @@ server <- function(input, output, session) {
       that can help you do just that. <br><br>
       
       Under <b>Financials</b> set the total amount that you and your roomies would like
-      to split in a Monetary Unit of your CHoice (MUCH). It could be USD, EUR or anything 
-      else. Under <b>Income per roomie</b> choose the number of people who share the flat. <br><br>
+      to split in a <u>M</u>onetary <u>U</u>nit of your <u>CH</u>oice (MUCH). 
+      It could be USD, EUR or any other currency. Under <b>Income per roomie</b> 
+      choose the number of people who share the flat. <br><br>
       
       A number of hypothetical names will appear. Each one of your roomies should pick a name
-      and type in their corresponding monthly income in the box - if one of your roomies 
-      is a free-lance, this will obviously vary month to month. <br>
+      and type in their corresponding monthly income into the box - if one of your roomies 
+      is a freelancer, this will obviously vary month to month. <br>
       Having all entered how much MUCHes you earned this moth, the plot will 
-      automatically adjust and you will be able to see how much MUCHes each one of 
+      automatically update and you will be able to see how much MUCHes each one of 
       you ought to pay this month. <br><br>
       
       Finally, in cases where there is a stark imbalance among roomies, you may 
