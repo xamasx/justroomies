@@ -134,8 +134,31 @@ server <- function(input, output, session) {
   
   observeEvent(input$show, {
     showModal(modalDialog(
-      title = "What am I looking at?",
-      "When I lived in Berlin I shared my flat with three other people. We all had different incomes. Our rooms had all diffeent surfaces. One of my roomies said, 'Well, if you want to be fair, we'd need to split the costs according to the surface we occupy'. And we did just that. We measured everyone's rooms, did the maths, came up with our respective monthly payments. But what if we wanted to do it differently? An obvious alternative would be to split the costs according to how much you can afford. Right? Here an app to do just that. You will need to disclose your income instead of measuring your surface... well, yeah... of course you will. But that is what fair looks like, isn't it?",
+      title = "How does it work?",
+      HTML("<p> When I lived in Berlin I shared my flat with three other people. 
+      We all had different incomes. Our rooms had all diffeent surfaces. 
+      One of my roomies said, 'Well, if you want to be fair, you'd need to split 
+      the costs according to the surface each one of us lives in'. And we did just that. <br>
+      
+      Here's an alternative for those who would like to split the costs according
+      to what each of you earn. <br><br>
+      
+      Under <b>Financials</b> set the total amount that you and your roomies would like
+      to split in a Monetary Unit of your CHoice (MUCH). It could be USD, EUR or anything 
+      else. Under <b>Income per roomie</b> choose the number of people who share the flat. <br>
+      A number of hypothetical names will appear. Each one of your roomies should pick a name
+      and type in their corresponding monthly income in the box - if one of your roomies 
+      is a free-lance, this will obviously vary month to month. <br><br> 
+      
+      Having all entered how much MUCHes you earn, the plot will adjust the values and
+      tell you how much MUCHes each one of you ought to pay for it to be a fair share
+      based on you how much you can afford. <br><br>
+      
+      In cases where there is a stark imbalance among roomies, you may want to consider
+      discussing a bare minimum that you all agree with. This way, you ensure that any
+      given month where, for example, Maurice happened to struggle does not take a 
+      stark toll on high-earner Lina.
+      </p>"),
       easyClose = TRUE,
       size= 'l',
       footer = modalButton("Ok, thanks!")
