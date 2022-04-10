@@ -157,10 +157,10 @@ server <- function(input, output, session) {
       automatically adjust and you will be able to see how much MUCHes each one of 
       you ought to pay this month. <br><br>
       
-      In cases where there is a stark imbalance among roomies, you may want to consider
-      discussing a bare minimum that you all agree with. This way, you ensure that any
-      given month where, for example, Maurice happened to struggle does not take a 
-      stark toll on high-earner Lina. </p>"),
+      Finally, in cases where there is a stark imbalance among roomies, you may 
+      want to consider agreeing upon the bare minimum you will be chipping in. 
+      This way, you ensure that any given month where, for example, Maurice 
+      happened to struggle does not take a stark toll on high-earner Lina. </p>"),
       easyClose = TRUE,
       size= 'l',
       footer = modalButton("Ok, thanks!")
