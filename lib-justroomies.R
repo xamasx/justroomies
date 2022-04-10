@@ -73,7 +73,7 @@ computeJustDistribution <- function(aRoomieVector,
       transmute(roomie, 
                 income, 
                 adjustedContribution = round(adjustedContribution, digits = 2),
-                percentageUsed = round(100*adjustedContribution/income, digits = 1),
+                percentageUsed = round(100 * adjustedContribution/income, digits = 1),
                 notification = paste0(roomie, " chips in ", percentageUsed, "% of his/her income"))
     
     return(summaryTibb)
@@ -96,6 +96,7 @@ deliverDummyTibb <- function() {
 
 deliverJustDistribution <- function(aRoomieVector, 
                                     anIncomeVector, 
+                                    aColoursVector,
                                     aTotalRent, 
                                     aBareMinimum) {
   
@@ -115,7 +116,7 @@ deliverJustDistribution <- function(aRoomieVector,
   }
   
   plot <- ggplot(result, aes(roomie, adjustedContribution, label = adjustedContribution)) + 
-    geom_bar(stat = "identity", fill = '#B8860B', color = 'black') + 
+    geom_bar(stat = "identity", fill = aColoursVector, color = 'black') + 
     coord_flip() +
     theme(panel.background = element_rect(fill = "gray",
                                           colour = "black",

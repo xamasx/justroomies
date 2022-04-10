@@ -114,9 +114,11 @@ server <- function(input, output, session) {
     
     names <- c('Aimé', 'Lina', 'Maurice', 'Janice', 'Paola', 'Salomon', 'Norbert', 'Tomasz', 'Ursula', 'Françoise')
     incomes <- c(input$incomeA, input$incomeL, input$incomeM, input$incomeJ, input$incomeP, input$incomeS, input$incomeN, input$incomeT, input$incomeU, input$incomeF)
+    colours <- c('#1ba1e2', '#60a917', '#a20025', '#f2b336', '#0042c4', '#005800', '#6e4b05', '#6a00ff', '#b19e00', '#6d00a3')
     
     deliverJustDistribution(names[1:input$roomies],
                             incomes[1:input$roomies],
+                            colours[1:input$roomies],
                             input$total, input$min)
     
   })
