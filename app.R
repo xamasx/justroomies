@@ -104,6 +104,7 @@ ui <- fluidPage(
   )
 )
 
+
 #-------------------------------------------------------------------
 # Server
 #-------------------------------------------------------------------
@@ -111,8 +112,11 @@ server <- function(input, output, session) {
   
   rcDistribution <- reactive({
     
-    deliverJustDistribution(c('Aime', 'Lina', 'Maurice', 'Janice'),
-                            c(input$incomeA, input$incomeL, input$incomeM, input$incomeJ),
+    names <- c('Aimé', 'Lina', 'Maurice', 'Janice', 'Paola', 'Salomon', 'Norbert', 'Tomasz', 'Ursula', 'Françoise')
+    incomes <- c(input$incomeA, input$incomeL, input$incomeM, input$incomeJ, input$incomeP, input$incomeS, input$incomeN, input$incomeT, input$incomeU, input$incomeF)
+    
+    deliverJustDistribution(names[1:input$roomies],
+                            incomes[1:input$roomies],
                             input$total, input$min)
     
   })
