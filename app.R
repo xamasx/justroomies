@@ -23,12 +23,12 @@ ui <- fluidPage(
                   value = 200,
                   min = 1,
                   max = 3000),
+      HTML("<br><h5><b>Income per roomie</b></h5>"),
       numericInput("roomies", 
                    "How many roomies?", 
                    value = 4,
                    min = 2,
                    max = 10),
-      HTML("<br><h5><b>Income per roomie</b></h5>"),
       numericInput("incomeA", 
                   "Aimé:", 
                   value = 800,
@@ -143,24 +143,24 @@ server <- function(input, output, session) {
       started struggling, I was convinced there had to be another way.<br>
       
       So, for those who currently live in a shared flat and would like to split 
-      the costs according to what each of you earn, here a simple calculator. <br><br>
+      the costs according to what each of you earn, here is a simple calculator
+      that can help you do just that. <br><br>
       
       Under <b>Financials</b> set the total amount that you and your roomies would like
       to split in a Monetary Unit of your CHoice (MUCH). It could be USD, EUR or anything 
-      else. Under <b>Income per roomie</b> choose the number of people who share the flat. <br>
+      else. Under <b>Income per roomie</b> choose the number of people who share the flat. <br><br>
+      
       A number of hypothetical names will appear. Each one of your roomies should pick a name
       and type in their corresponding monthly income in the box - if one of your roomies 
-      is a free-lance, this will obviously vary month to month. <br><br> 
-      
-      Having all entered how much MUCHes you earn, the plot will adjust the values and
-      tell you how much MUCHes each one of you ought to pay for it to be a fair share
-      based on you how much you can afford. <br><br>
+      is a free-lance, this will obviously vary month to month. <br>
+      Having all entered how much MUCHes you earned this moth, the plot will 
+      automatically adjust and you will be able to see how much MUCHes each one of 
+      you ought to pay this month. <br><br>
       
       In cases where there is a stark imbalance among roomies, you may want to consider
       discussing a bare minimum that you all agree with. This way, you ensure that any
       given month where, for example, Maurice happened to struggle does not take a 
-      stark toll on high-earner Lina.
-      </p>"),
+      stark toll on high-earner Lina. </p>"),
       easyClose = TRUE,
       size= 'l',
       footer = modalButton("Ok, thanks!")
