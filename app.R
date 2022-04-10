@@ -98,7 +98,11 @@ ui <- fluidPage(
     ),
     mainPanel(
       tabsetPanel(
-        tabPanel("Bar plot", plotOutput("bars"))
+        tabPanel("Bar plot", 
+                 HTML("<br>"),
+                 actionButton("show", "What is this?", class = "btn-outline-info"),
+                 HTML("<br><br>"),
+                 plotOutput("bars"))
       )
     )
   )
@@ -125,6 +129,14 @@ server <- function(input, output, session) {
   
   
   output$bars <- renderPlot({rcDistribution()[[2]]})
+  
+  observeEvent(input$show, {
+    showModal(modalDialog(
+      title = "Important message",
+      "This is an important message!",
+      easyClose = TRUE
+    ))
+  })
 }
 
 #-------------------------------------------------------------------
