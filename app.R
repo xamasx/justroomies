@@ -8,7 +8,7 @@ source('lib-justroomies.R')
 #-------------------------------------------------------------------
 ui <- fluidPage(
   
-  titlePanel("Cost distribution"),
+  titlePanel(HTML('<h1 style="text-align:right;color:#987752"> <b>JUST</b> &#9878; ROOMIES</h1>')),
   theme = shinythemes::shinytheme("simplex"),
   sidebarLayout(
     sidebarPanel(
@@ -98,7 +98,7 @@ ui <- fluidPage(
     ),
     mainPanel(
       tabsetPanel(
-        tabPanel("Chart", plotOutput("bars"))
+        tabPanel("Bar plot", plotOutput("bars"))
       )
     )
   )
