@@ -8,7 +8,7 @@ source('lib-justroomies.R')
 #-------------------------------------------------------------------
 ui <- fluidPage(
   
-  titlePanel(HTML('<h1 style="text-align:right;color:#987752"> <b>JUST</b> &#9878; ROOMIES</h1>')),
+  titlePanel(HTML('<h1 style="text-align:center;color:#987752"> <b>JUST</b> &#9878; ROOMIES</h1>')),
   theme = shinythemes::shinytheme("simplex"),
   sidebarLayout(
     sidebarPanel(
@@ -100,8 +100,10 @@ ui <- fluidPage(
       tabsetPanel(
         tabPanel("Bar plot", 
                  HTML("<br>"),
-                 actionButton("show", "What is this?", class = "btn-outline-info"),
-                 HTML("<br><br>"),
+                 actionButton("show", "How does it work?", 
+                              class = "btn-outline-info",
+                              style = "position: absolute; right: 40px"),
+                 HTML("<br><br><br><br>"),
                  plotOutput("bars"))
       )
     )
@@ -132,9 +134,11 @@ server <- function(input, output, session) {
   
   observeEvent(input$show, {
     showModal(modalDialog(
-      title = "Important message",
-      "This is an important message!",
-      easyClose = TRUE
+      title = "What am I looking at?",
+      "When I lived in Berlin I shared my flat with three other people. We all had different incomes. Our rooms had all diffeent surfaces. One of my roomies said, 'Well, if you want to be fair, we'd need to split the costs according to the surface we occupy'. And we did just that. We measured everyone's rooms, did the maths, came up with our respective monthly payments. But what if we wanted to do it differently? An obvious alternative would be to split the costs according to how much you can afford. Right? Here an app to do just that. You will need to disclose your income instead of measuring your surface... well, yeah... of course you will. But that is what fair looks like, isn't it?",
+      easyClose = TRUE,
+      size= 'l',
+      footer = modalButton("Ok, thanks!")
     ))
   })
 }
