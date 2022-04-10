@@ -138,10 +138,12 @@ server <- function(input, output, session) {
       HTML("<p> When I lived in Berlin I shared my flat with three other people. 
       We all had different incomes. Our rooms had all diffeent surfaces. 
       One of my roomies said, 'Well, if you want to be fair, you'd need to split 
-      the costs according to the surface each one of us lives in'. And we did just that. <br>
+      the costs according to the surface each one of us lives in'. And we did just that. 
+      But, deep down, it did not feel right. And when my girlfirend at the time
+      started struggling, I was convinced there had to be another way.<br>
       
-      Here's an alternative for those who would like to split the costs according
-      to what each of you earn. <br><br>
+      So, for those who currently live in a shared flat and would like to split 
+      the costs according to what each of you earn, here a simple calculator. <br><br>
       
       Under <b>Financials</b> set the total amount that you and your roomies would like
       to split in a Monetary Unit of your CHoice (MUCH). It could be USD, EUR or anything 
