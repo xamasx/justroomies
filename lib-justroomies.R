@@ -89,6 +89,7 @@ computeJustDistribution <- function(aRoomieVector,
               income, 
               adjustedContribution = round(rawContribution, digits = 2),
               percentageUsed = round(100*adjustedContribution/income, digits = 1),
+              percentageOfRent = round(100*adjustedContribution/aTotalRent, digits = 1),
               notification = paste0(roomie, " chips in ", percentageUsed, "% of his/her income"))
   
   return(summaryTibb)

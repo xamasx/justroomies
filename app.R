@@ -116,7 +116,15 @@ ui <- fluidPage(
                  HTML("<br><br><br><br>"),
                  plotOutput("mainPie")
           
-        ) #Close plotting tab 'Pie charts'
+        ), #Close plotting tab 'Pie charts'
+        tabPanel("Table",
+                 HTML("<br>"),
+                 actionButton("show", "How does it work?", 
+                              class = "btn-outline-info",
+                              style = "position: absolute; right: 40px"),
+                 HTML("<br><br><br><br>"),
+                 tableOutput("myTable")
+        ) # Close plotting tab table
       )
     )
   )
@@ -145,10 +153,12 @@ server <- function(input, output, session) {
   
   output$bars <- renderPlot({rcDistribution()[[2]]})
   
+  output$myTable <- renderTable({rcDistribution()[[1]]})
+  
   output$mainPie <- renderPlot({
     
     rcDistribution()[[1]] %>%
-      ggplot(aes(x = "", y = percentageUsed, fill = roomie)) +
+      ggplot(aes(x = "", y = percentageOfRent, fill = roomie)) +
       geom_bar(stat = "identity", width = 1) +
       coord_polar("y", start = 0) +
       theme_void() +
