@@ -8,7 +8,7 @@ source('lib-justroomies.R')
 #-------------------------------------------------------------------
 ui <- fluidPage(
   
-  titlePanel(HTML('<h1 style="text-align:center;color:#987752"> <b>JUST</b> &#9878; ROOMIES</h1>')),
+  titlePanel(HTML('<h1 style="text-align:center;color:#987752"> <b>JUST</b> &#9878; ROOMIES</h1><br><br>')),
   theme = shinythemes::shinytheme("simplex"),
   sidebarLayout(
     sidebarPanel(
