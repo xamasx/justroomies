@@ -23,13 +23,13 @@ ui <- fluidPage(
                   value = 150,
                   min = 1,
                   max = 3000),
+      HTML("<br><h5><b>Income per roomie</b></h5>"),
+      numericInput("roomies", 
+                   "How many roomies?", 
+                   value = 4,
+                   min = 2,
+                   max = 10),
       conditionalPanel(condition = "input.plotting_tabs == 'Bar plot'",
-                       HTML("<br><h5><b>Income per roomie</b></h5>"),
-                       numericInput("roomies", 
-                                    "How many roomies?", 
-                                    value = 4,
-                                    min = 2,
-                                    max = 10),
                        numericInput("incomeA", 
                                     "Aimé:", 
                                     value = 800,
@@ -114,7 +114,7 @@ ui <- fluidPage(
                               class = "btn-outline-info",
                               style = "position: absolute; right: 40px"),
                  HTML("<br><br><br><br>"),
-                 HTML("<b>Some charts!</b>")
+                 plotOutput("mainPie")
           
         ) #Close plotting tab 'Pie charts'
       )
@@ -128,11 +128,12 @@ ui <- fluidPage(
 #-------------------------------------------------------------------
 server <- function(input, output, session) {
   
+  names <- c('Aimé', 'Lina', 'Maurice', 'Janice', 'Paola', 'Salomon', 'Norbert', 'Tomasz', 'Ursula', 'Françoise')
+  colours <- c('#1ba1e2', '#60a917', '#a20025', '#c58608', '#0042c4', '#005800', '#6e4b05', '#6a00ff', '#b19e00', '#6d00a3')
+  
   rcDistribution <- reactive({
     
-    names <- c('Aimé', 'Lina', 'Maurice', 'Janice', 'Paola', 'Salomon', 'Norbert', 'Tomasz', 'Ursula', 'Françoise')
     incomes <- c(input$incomeA, input$incomeL, input$incomeM, input$incomeJ, input$incomeP, input$incomeS, input$incomeN, input$incomeT, input$incomeU, input$incomeF)
-    colours <- c('#1ba1e2', '#60a917', '#a20025', '#c58608', '#0042c4', '#005800', '#6e4b05', '#6a00ff', '#b19e00', '#6d00a3')
     
     deliverJustDistribution(names[1:input$roomies],
                             incomes[1:input$roomies],
@@ -143,6 +144,18 @@ server <- function(input, output, session) {
   
   
   output$bars <- renderPlot({rcDistribution()[[2]]})
+  
+  output$mainPie <- renderPlot({
+    
+    rcDistribution()[[1]] %>%
+      ggplot(aes(x = "", y = percentageUsed, fill = roomie)) +
+      geom_bar(stat = "identity", width = 1) +
+      coord_polar("y", start = 0) +
+      theme_void() +
+      scale_fill_manual(values = colours[1:input$roomies])
+  })
+  
+  
   
   observeEvent(input$show, {
     showModal(modalDialog(
