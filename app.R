@@ -162,7 +162,7 @@ server <- function(input, output, session) {
       geom_bar(stat = "identity", width = 1) +
       coord_polar("y", start = 0) +
       theme_void() +
-      scale_fill_manual(values = colours[1:input$roomies])
+      scale_fill_manual(values = rcDistribution()[[1]]$colour)
   })
   
   

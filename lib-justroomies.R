@@ -44,6 +44,7 @@ addRawContribution <- function(anIncomeTibb, aTotalRent, aBareMinimum) {
 
 computeJustDistribution <- function(aRoomieVector, 
                                     anIncomeVector, 
+                                    aColourVector,
                                     aTotalRent, 
                                     aBareMinimum) {
   
@@ -79,7 +80,9 @@ computeJustDistribution <- function(aRoomieVector,
                 income, 
                 adjustedContribution = round(adjustedContribution, digits = 2),
                 percentageUsed = round(100 * adjustedContribution/income, digits = 1),
-                notification = paste0(roomie, " chips in ", percentageUsed, "% of his/her income"))
+                percentageOfRent = round(100*adjustedContribution/aTotalRent, digits = 1),
+                notification = paste0(roomie, " chips in ", percentageUsed, "% of his/her income"),
+                colour = aColourVector)
     
     return(summaryTibb)
   }
@@ -90,7 +93,8 @@ computeJustDistribution <- function(aRoomieVector,
               adjustedContribution = round(rawContribution, digits = 2),
               percentageUsed = round(100*adjustedContribution/income, digits = 1),
               percentageOfRent = round(100*adjustedContribution/aTotalRent, digits = 1),
-              notification = paste0(roomie, " chips in ", percentageUsed, "% of his/her income"))
+              notification = paste0(roomie, " chips in ", percentageUsed, "% of his/her income"),
+              colour = aColourVector)
   
   return(summaryTibb)
 }
@@ -106,11 +110,11 @@ deliverDummyTibb <- function(mode = c("min", "total")) {
 
 deliverJustDistribution <- function(aRoomieVector, 
                                     anIncomeVector, 
-                                    aColoursVector,
+                                    aColourVector,
                                     aTotalRent, 
                                     aBareMinimum) {
   
-  result <- computeJustDistribution(aRoomieVector, anIncomeVector, aTotalRent, aBareMinimum)
+  result <- computeJustDistribution(aRoomieVector, anIncomeVector, aColourVector, aTotalRent, aBareMinimum)
   
   if(nrow(result)==1 && result$income==0) {
     
@@ -126,7 +130,7 @@ deliverJustDistribution <- function(aRoomieVector,
   }
   
   plot <- ggplot(result, aes(roomie, adjustedContribution, label = adjustedContribution)) + 
-    geom_bar(stat = "identity", fill = aColoursVector, color = 'black') + 
+    geom_bar(stat = "identity", fill = result$colour, color = 'black') + 
     coord_flip() +
     theme(panel.background = element_rect(fill = "gray",
                                           colour = "black",
