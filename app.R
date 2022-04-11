@@ -161,8 +161,13 @@ server <- function(input, output, session) {
       ggplot(aes(x = "", y = percentageOfRent, fill = roomie)) +
       geom_bar(stat = "identity", width = 1) +
       coord_polar("y", start = 0) +
-      theme_void() +
-      scale_fill_manual(values = rcDistribution()[[1]]$colour)
+      theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5),
+            axis.text = element_blank(),
+            panel.grid  = element_blank(),
+            panel.background = element_blank()) +
+      scale_fill_manual(values = rcDistribution()[[1]]$colour) +
+      labs(x = "", y = "", title = "Fraction of total rent per roomie")
+      
   })
   
   
