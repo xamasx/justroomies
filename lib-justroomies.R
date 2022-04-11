@@ -34,7 +34,8 @@ addRawContribution <- function(anIncomeTibb, aTotalRent, aBareMinimum) {
   
   contributionFunction <- function(x) deliverRawContribution(x, anIncomeTibb$income) - aTotalRent
   
-  thisFraction <- uniroot(contributionFunction, lower=0.1, upper=100000000)$root
+  thisFraction <- tryCatch(uniroot(contributionFunction, lower=0.01, upper=100000000)$root,
+                           error = function(e) 0)
   
   anIncomeTibb %>%
     mutate(rawContribution = thisFraction * income,
@@ -49,6 +50,10 @@ computeJustDistribution <- function(aRoomieVector,
   
   subTibb <- deliverIncomeTibb(aRoomieVector, anIncomeVector) %>% 
     addRawContribution(aTotalRent, aBareMinimum)
+                      
+  if(0 %in% subTibb$rawContribution) {
+    return(deliverDummyTibb(mode = "total"))
+  }
   
   if(TRUE %in% subTibb$isLowerThanMin) { 
     
@@ -59,7 +64,7 @@ computeJustDistribution <- function(aRoomieVector,
     newTotalRent <- aTotalRent - (nrow(cappedTibb) * aBareMinimum)
     
     if(newTotalRent < 0) {
-      return(deliverDummyTibb())
+      return(deliverDummyTibb(mode = "min"))
     }
     
     newSubTibb <- subTibb %>%
@@ -89,8 +94,12 @@ computeJustDistribution <- function(aRoomieVector,
   return(summaryTibb)
 }
 
-deliverDummyTibb <- function() {
-  tibble(msg = c('The bare minimum is too high!'), income = c(0))
+deliverDummyTibb <- function(mode = c("min", "total")) {
+  if(mode == "min") {
+    tibble(msg = c('The bare minimum is too high!'), income = c(0))
+  } else {
+    tibble(msg = c('The total rent is too low!'), income = c(0))
+  }
 }
 
 
