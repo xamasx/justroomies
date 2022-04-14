@@ -76,27 +76,28 @@ computeJustDistribution <- function(aRoomieVector,
     
     summaryTibb <- cappedTibb %>%
       rbind(newSubTibb) %>%
-      transmute(roomie, 
-                income, 
-                adjustedContribution = round(adjustedContribution, digits = 2),
-                percentageUsed = round(100 * adjustedContribution/income, digits = 1),
-                percentageOfRent = round(100*adjustedContribution/aTotalRent, digits = 1),
-                notification = paste0(roomie, " chips in ", percentageUsed, "% of his/her income"),
-                colour = aColourVector)
+      buildSummary(aTotalRent, aColourVector)
     
     return(summaryTibb)
   }
   
   summaryTibb <- subTibb %>%
+    buildSummary(aTotalRent, aColourVector)
+  
+  return(summaryTibb)
+}
+
+buildSummary <- function(aSubTibble, aTotalRent, aColourVector) {
+  
+  aSubTibble %>%
     transmute(roomie, 
               income, 
               adjustedContribution = round(rawContribution, digits = 2),
               percentageUsed = round(100*adjustedContribution/income, digits = 1),
               percentageOfRent = round(100*adjustedContribution/aTotalRent, digits = 1),
+              percentageLabel = paste0(percentageOfRent, ' %'),
               notification = paste0(roomie, " chips in ", percentageUsed, "% of his/her income"),
               colour = aColourVector)
-  
-  return(summaryTibb)
 }
 
 deliverDummyTibb <- function(mode = c("min", "total")) {

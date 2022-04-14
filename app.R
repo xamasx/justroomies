@@ -102,7 +102,7 @@ ui <- fluidPage(
       tabsetPanel(id = "plotting_tabs",
         tabPanel("Bar plot", 
                  HTML("<br>"),
-                 actionButton("show", "How does it work?", 
+                 actionButton("explanation", "How does it work?", 
                               class = "btn-outline-info",
                               style = "position: absolute; right: 40px"),
                  HTML("<br><br><br><br>"),
@@ -110,7 +110,7 @@ ui <- fluidPage(
                  ), #Close plotting tab 'Bar plot'
         tabPanel("Pie charts",
                  HTML("<br>"),
-                 actionButton("show", "How does it work?", 
+                 actionButton("explanation", "How does it work?", 
                               class = "btn-outline-info",
                               style = "position: absolute; right: 40px"),
                  HTML("<br><br><br><br>"),
@@ -119,9 +119,7 @@ ui <- fluidPage(
         ), #Close plotting tab 'Pie charts'
         tabPanel("Table",
                  HTML("<br>"),
-                 actionButton("show", "How does it work?", 
-                              class = "btn-outline-info",
-                              style = "position: absolute; right: 40px"),
+                 actionButton("esp", label = HTML('<img src="https://www.countryflagicons.com/SHINY/64/DE.png">')),
                  HTML("<br><br><br><br>"),
                  tableOutput("myTable")
         ) # Close plotting tab table
@@ -160,19 +158,20 @@ server <- function(input, output, session) {
     rcDistribution()[[1]] %>%
       ggplot(aes(x = "", y = percentageOfRent, fill = roomie)) +
       geom_bar(stat = "identity", width = 1) +
+      geom_label(aes(label = percentageLabel), position = position_stack(vjust = 0.5), show.legend = FALSE) +
       coord_polar("y", start = 0) +
       theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5),
             axis.text = element_blank(),
             panel.grid  = element_blank(),
             panel.background = element_blank()) +
-      scale_fill_manual(values = rcDistribution()[[1]]$colour) +
+      scale_fill_manual(values = rcDistribution()[[1]][['colour']]) +  
       labs(x = "", y = "", title = "Fraction of total rent per roomie")
       
   })
   
   
   
-  observeEvent(input$show, {
+  observeEvent(input$explanation, {
     showModal(modalDialog(
       title = "How does it work?",
       HTML("<p> When I lived in Berlin I shared my flat with three other people. 
