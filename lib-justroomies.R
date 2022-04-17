@@ -149,6 +149,23 @@ deliverJustDistribution <- function(aRoomieVector,
   return(list(result, plot))
 }
 
+isSingleString <- function(input) {
+  is.character(input) & length(input) == 1
+}
+
+translateHowDoesItWork <- function(aLanguage) {
+  if(isSingleString(aLanguage)) {
+    switch(aLanguage,
+           "en" = "How does it work?",
+           "es" = "¿Cómo funciona?",
+           "de" = "Wie funktioniert's?",
+           "fr" = "Comment ça marche?",
+           "nl" = "Hoe werkt het?")
+  } else {
+    "How does it work?"
+  }
+}
+
 #-------------------------------------------------------------------------------
 # HTML
 #-------------------------------------------------------------------------------

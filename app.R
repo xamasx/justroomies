@@ -13,13 +13,13 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       checkboxInput("check_lang", HTML("<b>Show available languages</b>"), FALSE),
-      #HTML("<h5><b>Change language</b></h5>"),
       conditionalPanel(condition = "input.check_lang",
         radioButtons("lang", "Choose a language:",
                      c("English" = "en",
+                       "Deutsch" = "de",
                        "Español" = "es",
-                       "Francais" = "fr",
-                       "Deutsch" = "de"))
+                       "Français" = "fr",
+                       "Nederlands" = "nl"))
       ),
       HTML("<h5><b>Financials</b></h5>"),
       numericInput('total', 
@@ -111,27 +111,20 @@ ui <- fluidPage(
       tabsetPanel(id = "plotting_tabs",
         tabPanel("Bar plot", 
                  HTML("<br>"),
-                 actionButton("explanation", "How does it work?", 
-                              class = "btn-outline-info",
-                              style = "position: absolute; right: 40px"),
+                 uiOutput("explainBtn"),
                  HTML("<br><br><br><br>"),
                  plotOutput("bars")
                  ), #Close plotting tab 'Bar plot'
         tabPanel("Pie charts",
                  HTML("<br>"),
-                 actionButton("explanation", "How does it work?", 
-                              #class = "btn-secondary",
-                              style = "position: absolute; right: 40px; background-color:#FFFAF0"),
+                 #uiOutput("explainBtn"),
                  HTML("<br><br><br><br>"),
                  plotOutput("mainPie")
           
         ), #Close plotting tab 'Pie charts'
         tabPanel("Table",
                  HTML("<br>"),
-                 actionButton("esp", 
-                              label = HTML('<img src="https://cdn-icons-png.flaticon.com/128/3909/3909219.png" width="18" height="18">'),
-                              class = "btn-outline-info",
-                              style="background-color:#337ab7; border-color: #2e6da4"),
+                 #uiOutput("explainBtn"),
                  HTML("<br><br><br><br>"),
                  tableOutput("myTable")
         ) # Close plotting tab table
@@ -145,6 +138,14 @@ ui <- fluidPage(
 # Server
 #-------------------------------------------------------------------
 server <- function(input, output, session) {
+  
+  output$explainBtn <- renderUI({ 
+     
+    actionButton("explanation", 
+                 label = translateHowDoesItWork(input$lang), 
+                 class = "btn-outline-info",
+                 style = "position: absolute; right: 40px")
+    })
   
   names <- c('Aimé', 'Lina', 'Maurice', 'Janice', 'Paola', 'Salomon', 'Norbert', 'Tomasz', 'Ursula', 'Françoise')
   colours <- c('#1ba1e2', '#60a917', '#a20025', '#c58608', '#0042c4', '#005800', '#6e4b05', '#6a00ff', '#b19e00', '#6d00a3')
