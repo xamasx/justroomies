@@ -192,7 +192,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$explanation, {
     showModal(modalDialog(
-      title = "How does it work?",
+      title = translateHowDoesItWork(input$lang),
       HTML(deliverExplanation()),
       easyClose = TRUE,
       size= 'l',
