@@ -12,6 +12,15 @@ ui <- fluidPage(
   theme = shinythemes::shinytheme("simplex"),
   sidebarLayout(
     sidebarPanel(
+      checkboxInput("check_lang", HTML("<b>Show available languages</b>"), FALSE),
+      #HTML("<h5><b>Change language</b></h5>"),
+      conditionalPanel(condition = "input.check_lang",
+        radioButtons("lang", "Choose a language:",
+                     c("English" = "en",
+                       "Español" = "es",
+                       "Francais" = "fr",
+                       "Deutsch" = "de"))
+      ),
       HTML("<h5><b>Financials</b></h5>"),
       numericInput('total', 
                    'Total rent:',
@@ -111,8 +120,8 @@ ui <- fluidPage(
         tabPanel("Pie charts",
                  HTML("<br>"),
                  actionButton("explanation", "How does it work?", 
-                              class = "btn-outline-info",
-                              style = "position: absolute; right: 40px"),
+                              #class = "btn-secondary",
+                              style = "position: absolute; right: 40px; background-color:#FFFAF0"),
                  HTML("<br><br><br><br>"),
                  plotOutput("mainPie")
           
@@ -120,7 +129,9 @@ ui <- fluidPage(
         tabPanel("Table",
                  HTML("<br>"),
                  actionButton("esp", 
-                              label = HTML('<img src="https://www.countryflagicons.com/SHINY/64/DE.png" width="18" height="17">')),
+                              label = HTML('<img src="https://cdn-icons-png.flaticon.com/128/3909/3909219.png" width="18" height="18">'),
+                              class = "btn-outline-info",
+                              style="background-color:#337ab7; border-color: #2e6da4"),
                  HTML("<br><br><br><br>"),
                  tableOutput("myTable")
         ) # Close plotting tab table
