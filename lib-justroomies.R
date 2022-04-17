@@ -1,15 +1,15 @@
-#-------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # App requirements
-#-------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 require(dplyr)
 require(ggplot2)
 require(shiny)
 require(shinythemes)
 
 
-#-------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # UDFs 
-#-------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 deliverRawContribution <- function(aFraction, aVectorOfIncomes) {
   
   sum(aFraction*aVectorOfIncomes)
@@ -147,4 +147,38 @@ deliverJustDistribution <- function(aRoomieVector,
     geom_text(size = 7, position = position_stack(vjust = 0.5), color = "#F8F8FF")
   
   return(list(result, plot))
+}
+
+#-------------------------------------------------------------------------------
+# HTML
+#-------------------------------------------------------------------------------
+
+deliverExplanation <- function() {
+  "<p> When I lived in Berlin I shared my flat with three other people. 
+      We all had different incomes. Our rooms had all diffeent surfaces. 
+      One of my roomies said, 'Well, if you want to be fair, you'd need to split 
+      the costs according to the surface each one of us lives in'. And we did just that. 
+      But, deep down, it did not feel right. And when my girlfirend at the time
+      started struggling, I was convinced there had to be another way.<br>
+      
+      So, for those who currently live in a shared flat and would like to split 
+      the costs according to what each of you earn, here is a simple calculator
+      that can help you do just that. <br><br>
+      
+      Under <b>Financials</b> set the total amount that you and your roomies would like
+      to split in a <u>M</u>onetary <u>U</u>nit of your <u>CH</u>oice (MUCH). 
+      It could be USD, EUR or any other currency. Under <b>Income per roomie</b> 
+      choose the number of people who share the flat. <br><br>
+      
+      A number of hypothetical names will appear. Each one of your roomies should pick a name
+      and type in their corresponding monthly income into the box - if one of your roomies 
+      is a freelancer, this will obviously vary month to month. <br>
+      Having all entered how much MUCHes you earned this moth, the plot will 
+      automatically update and you will be able to see how much MUCHes each one of 
+      you ought to pay this month. <br><br>
+      
+      Finally, in cases where there is a stark imbalance among roomies, you may 
+      want to consider agreeing upon the bare minimum you will be chipping in. 
+      This way, you ensure that any given month where, for example, Maurice 
+      happened to struggle does not take a stark toll on high-earner Lina. </p>"
 }

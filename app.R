@@ -119,7 +119,8 @@ ui <- fluidPage(
         ), #Close plotting tab 'Pie charts'
         tabPanel("Table",
                  HTML("<br>"),
-                 actionButton("esp", label = HTML('<img src="https://www.countryflagicons.com/SHINY/64/DE.png">')),
+                 actionButton("esp", 
+                              label = HTML('<img src="https://www.countryflagicons.com/SHINY/64/DE.png" width="18" height="17">')),
                  HTML("<br><br><br><br>"),
                  tableOutput("myTable")
         ) # Close plotting tab table
@@ -157,15 +158,21 @@ server <- function(input, output, session) {
     
     rcDistribution()[[1]] %>%
       ggplot(aes(x = "", y = percentageOfRent, fill = roomie)) +
-      geom_bar(stat = "identity", width = 1) +
-      geom_label(aes(label = percentageLabel), position = position_stack(vjust = 0.5), show.legend = FALSE) +
       coord_polar("y", start = 0) +
+      geom_bar(stat = "identity", width = 1) +
+      labs(x = "", y = "", title = "Fraction of total rent per roomie") +
+      geom_label(aes(label = percentageLabel), 
+                 position = position_stack(vjust = 0.5), 
+                 show.legend = FALSE,
+                 label.size = 0.65) +
       theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5),
             axis.text = element_blank(),
             panel.grid  = element_blank(),
-            panel.background = element_blank()) +
-      scale_fill_manual(values = rcDistribution()[[1]][['colour']]) +  
-      labs(x = "", y = "", title = "Fraction of total rent per roomie")
+            panel.background = element_blank(),
+            legend.title = element_blank(),
+            legend.text = element_text(size = 14)) +
+      scale_fill_manual(values = rcDistribution()[[1]][['colour']]) 
+      
       
   })
   
@@ -174,33 +181,7 @@ server <- function(input, output, session) {
   observeEvent(input$explanation, {
     showModal(modalDialog(
       title = "How does it work?",
-      HTML("<p> When I lived in Berlin I shared my flat with three other people. 
-      We all had different incomes. Our rooms had all diffeent surfaces. 
-      One of my roomies said, 'Well, if you want to be fair, you'd need to split 
-      the costs according to the surface each one of us lives in'. And we did just that. 
-      But, deep down, it did not feel right. And when my girlfirend at the time
-      started struggling, I was convinced there had to be another way.<br>
-      
-      So, for those who currently live in a shared flat and would like to split 
-      the costs according to what each of you earn, here is a simple calculator
-      that can help you do just that. <br><br>
-      
-      Under <b>Financials</b> set the total amount that you and your roomies would like
-      to split in a <u>M</u>onetary <u>U</u>nit of your <u>CH</u>oice (MUCH). 
-      It could be USD, EUR or any other currency. Under <b>Income per roomie</b> 
-      choose the number of people who share the flat. <br><br>
-      
-      A number of hypothetical names will appear. Each one of your roomies should pick a name
-      and type in their corresponding monthly income into the box - if one of your roomies 
-      is a freelancer, this will obviously vary month to month. <br>
-      Having all entered how much MUCHes you earned this moth, the plot will 
-      automatically update and you will be able to see how much MUCHes each one of 
-      you ought to pay this month. <br><br>
-      
-      Finally, in cases where there is a stark imbalance among roomies, you may 
-      want to consider agreeing upon the bare minimum you will be chipping in. 
-      This way, you ensure that any given month where, for example, Maurice 
-      happened to struggle does not take a stark toll on high-earner Lina. </p>"),
+      HTML(deliverExplanation()),
       easyClose = TRUE,
       size= 'l',
       footer = modalButton("Ok, thanks!")
