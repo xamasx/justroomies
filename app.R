@@ -157,7 +157,9 @@ server <- function(input, output, session) {
     deliverJustDistribution(names[1:input$roomies],
                             incomes[1:input$roomies],
                             colours[1:input$roomies],
-                            input$total, input$min)
+                            input$total, 
+                            input$min,
+                            input$lang)
     
   })
   
@@ -172,7 +174,7 @@ server <- function(input, output, session) {
       ggplot(aes(x = "", y = percentageOfRent, fill = roomie)) +
       coord_polar("y", start = 0) +
       geom_bar(stat = "identity", width = 1) +
-      labs(x = "", y = "", title = "Fraction of total rent per roomie") +
+      labs(x = "", y = "", title = deliverPieChartTitle(input$lang)) +
       geom_label(aes(label = percentageLabel), 
                  position = position_stack(vjust = 0.5), 
                  show.legend = FALSE,

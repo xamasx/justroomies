@@ -113,7 +113,8 @@ deliverJustDistribution <- function(aRoomieVector,
                                     anIncomeVector, 
                                     aColourVector,
                                     aTotalRent, 
-                                    aBareMinimum) {
+                                    aBareMinimum,
+                                    aLanguage) {
   
   result <- computeJustDistribution(aRoomieVector, anIncomeVector, aColourVector, aTotalRent, aBareMinimum)
   
@@ -143,7 +144,7 @@ deliverJustDistribution <- function(aRoomieVector,
           axis.title.y = element_text(color = "black", size = 16)
     ) +
     labs(x = "", y = "MUCHes",
-         title = "Income-based contributions") +
+         title = translatePlotTitle(aLanguage)) +
     geom_text(size = 7, position = position_stack(vjust = 0.5), color = "#F8F8FF")
   
   return(list(result, plot))
@@ -151,6 +152,19 @@ deliverJustDistribution <- function(aRoomieVector,
 
 isSingleString <- function(input) {
   is.character(input) & length(input) == 1
+}
+
+translatePlotTitle <- function(aLanguage) {
+  if(isSingleString(aLanguage)) {
+    switch(aLanguage,
+           "en" = "Income-based contributions!",
+           "es" = "Contribuciones ajustadas al ingreso",
+           "de" = "Einkommensbezogene Beiträge",
+           "fr" = "Contributions adjustées au revenu",
+           "nl" = "Inkomensgerelateerde bijdragen")
+  } else {
+    "Ok, thanks!"
+  }
 }
 
 translateOK <- function(aLanguage) {
@@ -165,6 +179,20 @@ translateOK <- function(aLanguage) {
     "Ok, thanks!"
   }
 }
+
+deliverPieChartTitle <- function(aLanguage) {
+  if(isSingleString(aLanguage)) {
+    switch(aLanguage,
+           "en" = "Fraction of total rent per person",
+           "es" = "Fracción del total por persona",
+           "de" = "Bruchteil der Gesamtmiete per Mitbewohner",
+           "fr" = "Fraction du total par personne",
+           "nl" = "Deel van de huur per persoon")
+  } else {
+    "Fraction of total rent per roomie"
+  }
+} 
+
 
 translateHowDoesItWork <- function(aLanguage) {
   if(isSingleString(aLanguage)) {
