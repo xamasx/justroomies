@@ -32,7 +32,7 @@ ui <- fluidPage(
                   value = 150,
                   min = 1,
                   max = 3000),
-      HTML("<br><h5><b>Income per roomie</b></h5>"),
+      HTML("<br><h5><b>Income per roommate</b></h5>"),
       numericInput("roomies", 
                    "How many roomies?", 
                    value = 4,
@@ -193,10 +193,10 @@ server <- function(input, output, session) {
   observeEvent(input$explanation, {
     showModal(modalDialog(
       title = translateHowDoesItWork(input$lang),
-      HTML(deliverExplanation()),
+      HTML(translateExplanation(input$lang)),
       easyClose = TRUE,
       size= 'l',
-      footer = modalButton("Ok, thanks!")
+      footer = modalButton(translateOK(input$lang))
     ))
   })
 }
